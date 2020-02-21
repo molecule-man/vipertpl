@@ -1,5 +1,8 @@
 # vipertpl
 
+[![GoDoc](https://godoc.org/github.com/molecule-man/vipertpl?status.svg)](https://godoc.org/github.com/molecule-man/vipertpl)
+[![CircleCI](https://circleci.com/gh/molecule-man/vipertpl.svg?style=svg)](https://circleci.com/gh/molecule-man/vipertpl)
+
 Package `vipertpl` extends viper's functionality with ability to use golang templates in string variables.
 
 ## Usage example
