@@ -11,11 +11,37 @@ import (
 	"github.com/spf13/viper"
 )
 
+// New creates new Parser
+func New(funcs template.FuncMap) *Parser {
+	return &Parser{funcs}
+}
+
+// Parser is a struct holding `Parse` functionality
+type Parser struct {
+	funcs template.FuncMap
+}
+
 // Parse goes though all the keys stored in viper config and parses them with
 // golang's internal templating engine
 func Parse(v *viper.Viper) error {
+	p := Parser{}
+	return p.Parse(v)
+}
+
+// Parse goes though all the keys stored in viper config and parses them with
+// golang's internal templating engine
+func (p *Parser) Parse(v *viper.Viper) error {
 	for _, key := range v.AllKeys() {
-		parser := parser{v, map[string]struct{}{}}
+		parser := parser{v: v, visitedKeys: map[string]struct{}{}}
+
+		parser.funcs = template.FuncMap{
+			"ViperGet": parser.viperGet,
+		}
+
+		for k, v := range p.funcs {
+			parser.funcs[k] = v
+		}
+
 		val := v.Get(key)
 
 		_, err := parser.parseTpl(key, val)
@@ -30,6 +56,7 @@ func Parse(v *viper.Viper) error {
 type parser struct {
 	v           *viper.Viper
 	visitedKeys map[string]struct{}
+	funcs       template.FuncMap
 }
 
 func (p *parser) viperGet(key string) (interface{}, error) {
