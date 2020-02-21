@@ -1,0 +1,23 @@
+run:
+  deadline: 3m
+  skip-dirs:
+    - ^pkg/client
+
+linters:
+  enable-all: true
+  disable:
+    - maligned
+    - gomnd
+
+issues:
+  # Ignore all default error exclusions
+  exclude-use-default: false
+  # But still keep this exclusions:
+  exclude:
+    # gosec: Triggered by 'src, err := ioutil.ReadFile(filename)'
+    - Potential file inclusion via variable
+
+linters-settings:
+  lll:
+    # max line length, lines longer will be reported. Default is 120.
+    line-length: 120
