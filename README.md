@@ -4,7 +4,8 @@
 [![CircleCI](https://circleci.com/gh/molecule-man/vipertpl.svg?style=svg)](https://circleci.com/gh/molecule-man/vipertpl)
 
 Package `vipertpl` extends [viper's](https://github.com/spf13/viper)
-functionality with ability to use golang templates in string variables.
+functionality with ability to use golang
+[templates](https://golang.org/pkg/text/template/) in string variables.
 
 ## Usage example
 
