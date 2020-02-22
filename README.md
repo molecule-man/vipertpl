@@ -57,7 +57,7 @@ function mimics `docker port <container name> <private port>` command
 
 ```yaml
 database:
-  dsn: 'user:password@tcp({{ DockerPort myservice.mysql 3306 }})
+  dsn: 'user:password@tcp({{ DockerPort "myservice.mysql" 3306 }})
 ```
 
 ```go
@@ -80,7 +80,7 @@ if err != nil {
 // as the `docker port` function is not built-in we must initialize parser with
 // this function added to a list of available template functions:
 parser := vipertpl.New(template.FuncMap{
-	"DockerPort": dockerFuncs.Port
+	"DockerPort": dockerFuncs.Port,
 })
 
 parser.Parse(viper.GetViper())

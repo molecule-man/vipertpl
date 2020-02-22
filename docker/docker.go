@@ -52,9 +52,13 @@ type Docker struct {
 
 // Port is a template function that mimics
 // `docker port <container name> <private port>` function
-func (d *Docker) Port(containerName string, port uint16) (string, bool) {
+func (d *Docker) Port(containerName string, port uint16) (string, error) {
 	url, ok := d.ports[cntPort{containerName, port}]
-	return url, ok
+	if !ok {
+		return "", fmt.Errorf("Docker.Port failed as container %s (port %d) is not found", containerName, port)
+	}
+
+	return url, nil
 }
 
 type cntPort struct {

@@ -76,11 +76,7 @@ func (p *parser) parseTpl(key string, rawVal interface{}) (interface{}, error) {
 		return rawVal, nil
 	}
 
-	tpl, err := template.New(val).
-		Funcs(template.FuncMap{
-			"ViperGet": p.viperGet,
-		}).
-		Parse(val)
+	tpl, err := template.New(val).Funcs(p.funcs).Parse(val)
 	if err != nil {
 		return val, err
 	}
