@@ -3,7 +3,8 @@
 [![GoDoc](https://godoc.org/github.com/molecule-man/vipertpl?status.svg)](https://godoc.org/github.com/molecule-man/vipertpl)
 [![CircleCI](https://circleci.com/gh/molecule-man/vipertpl.svg?style=svg)](https://circleci.com/gh/molecule-man/vipertpl)
 
-Package `vipertpl` extends viper's functionality with ability to use golang templates in string variables.
+Package `vipertpl` extends [viper's](https://github.com/spf13/viper)
+functionality with ability to use golang templates in string variables.
 
 ## Usage example
 
@@ -52,8 +53,9 @@ fmt.Printf("%#v", viper.Get("buz"))
 
 ### Docker port
 
-One can use a function to retrieve public port of docker container. This
-function mimics `docker port <container name> <private port>` command
+It is possible to invoke command [docker port CONTAINER
+PRIVATE_PORT](https://docs.docker.com/engine/reference/commandline/port/) inside
+the template:
 
 ```yaml
 database:
