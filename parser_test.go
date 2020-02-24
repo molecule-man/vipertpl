@@ -2,6 +2,7 @@ package vipertpl
 
 import (
 	"bytes"
+	"os"
 	"testing"
 
 	"github.com/matryer/is"
@@ -78,4 +79,23 @@ bar: 'bar + {{ ViperGet "number" }} + {{ ViperGet "boolean" }}'
 	is.Equal("bar + 42 + true", viper.Get("bar"))
 	is.Equal(true, viper.Get("boolean"))
 	is.Equal(42, viper.Get("number"))
+}
+
+func TestTplFuncExec(t *testing.T) {
+	if os.Getenv("TEST_INT") != "on" {
+		t.Skip("To enable this integration test provide `TEST_INT=on` as an env variable")
+	}
+
+	is := is.New(t)
+
+	input := []byte(`foo: '{{ Exec "echo" "foo_val" }}'`)
+
+	viper := viper.New()
+	viper.SetConfigType("yaml")
+	is.NoErr(viper.ReadConfig(bytes.NewBuffer(input)))
+
+	err := Parse(viper)
+	is.NoErr(err)
+
+	is.Equal("foo_val", viper.Get("foo"))
 }

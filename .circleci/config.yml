@@ -10,4 +10,8 @@ jobs:
       - run: curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.23.6
 
       - run: golangci-lint run
-      - run: go test -v ./...
+      - run:
+          name: test
+          environment:
+            TEST_INT: "on"
+          command: go test -v ./...

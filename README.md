@@ -40,6 +40,7 @@ applies template parsing to the output of `viper.Get` (can be used recursively.
 See the following example).
 
 ```yaml
+# example yaml config
 foo: "foo value"
 bar: 'bar value + {{ ViperGet "foo" }}'
 buz: 'buz value + {{ ViperGet "bar" }}'
@@ -50,6 +51,15 @@ buz: 'buz value + {{ ViperGet "bar" }}'
 vipertpl.Parse(viper.GetViper())
 fmt.Printf("%#v", viper.Get("buz"))
 // Output: "buz value + bar val + foo val"
+```
+
+### Exec
+
+`Exec` is a built-in function which executes specified external command.
+
+```yaml
+# example yaml config
+foo: '{{ Exec "echo" "foo_val" }}'
 ```
 
 ### Docker port

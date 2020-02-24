@@ -6,6 +6,8 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"os/exec"
+	"strings"
 	"text/template"
 
 	"github.com/spf13/viper"
@@ -35,7 +37,8 @@ func (p *Parser) Parse(v *viper.Viper) error {
 		parser := parser{v: v, visitedKeys: map[string]struct{}{}}
 
 		parser.funcs = template.FuncMap{
-			"ViperGet": parser.viperGet,
+			"ViperGet": parser.tplFuncViperGet,
+			"Exec":     tplFuncExec,
 		}
 
 		for k, v := range p.funcs {
@@ -59,7 +62,7 @@ type parser struct {
 	funcs       template.FuncMap
 }
 
-func (p *parser) viperGet(key string) (interface{}, error) {
+func (p *parser) tplFuncViperGet(key string) (interface{}, error) {
 	if _, isVisited := p.visitedKeys[key]; isVisited {
 		return "", fmt.Errorf("not able to parse tpl for key %s: %w", key, ErrCircularDependency)
 	}
@@ -90,6 +93,15 @@ func (p *parser) parseTpl(key string, rawVal interface{}) (interface{}, error) {
 	p.v.Set(key, buf.String())
 
 	return buf.String(), nil
+}
+
+func tplFuncExec(cmd string, args ...string) (string, error) {
+	out, err := exec.Command(cmd, args...).CombinedOutput() //nolint:gosec
+	if err != nil {
+		return "", err
+	}
+
+	return strings.TrimSpace(string(out)), nil
 }
 
 // ErrCircularDependency is returned when there is a circular dependency caused
