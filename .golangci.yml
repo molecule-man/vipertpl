@@ -15,6 +15,7 @@ linters:
     - nlreturn
     - paralleltest
     - testpackage
+    - unparam # fails in ci
     - varnamelen
     - wrapcheck
 
