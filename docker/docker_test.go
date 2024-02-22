@@ -17,29 +17,29 @@ func TestPort(t *testing.T) {
 		{
 			Names: []string{"hello"},
 			Ports: []types.Port{
-				{IP: "docker.host", PrivatePort: 80, PublicPort: 12345},
-				{IP: "docker.host", PrivatePort: 8080, PublicPort: 32345},
+				{IP: "0.0.0.0", PrivatePort: 80, PublicPort: 12345},
+				{IP: "0.0.0.0", PrivatePort: 8080, PublicPort: 32345},
 			},
 		},
 		{
 			Names: []string{"world"},
 			Ports: []types.Port{
-				{IP: "docker.host2", PrivatePort: 80, PublicPort: 18888},
+				{IP: "0.0.0.1", PrivatePort: 80, PublicPort: 18888},
 			},
 		},
 	})
 
 	url, err := docker.Port("hello", 80)
 	is.NoErr(err)
-	is.Equal("docker.host:12345", url)
+	is.Equal("0.0.0.0:12345", url)
 
 	url, err = docker.Port("hello", 8080)
 	is.NoErr(err)
-	is.Equal("docker.host:32345", url)
+	is.Equal("0.0.0.0:32345", url)
 
 	url, err = docker.Port("world", 80)
 	is.NoErr(err)
-	is.Equal("docker.host2:18888", url)
+	is.Equal("0.0.0.1:18888", url)
 
 	_, err = docker.Port("non.existent", 80)
 	is.True(err != nil)
@@ -61,7 +61,7 @@ func TestTemplatingWithDockerPort(t *testing.T) {
 		{
 			Names: []string{"testcnt"},
 			Ports: []types.Port{
-				{IP: "docker.host", PrivatePort: 80, PublicPort: 12345},
+				{IP: "0.0.0.0", PrivatePort: 80, PublicPort: 12345},
 			},
 		},
 	})
@@ -72,5 +72,5 @@ func TestTemplatingWithDockerPort(t *testing.T) {
 	err := parser.Parse(viper)
 	is.NoErr(err)
 
-	is.Equal("docker.host:12345", viper.Get("foo"))
+	is.Equal("0.0.0.0:12345", viper.Get("foo"))
 }

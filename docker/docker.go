@@ -5,20 +5,26 @@ package docker
 import (
 	"context"
 	"fmt"
+	"net"
 	"strings"
 
 	"github.com/docker/docker/api/types"
+	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
 )
 
 // New initializes new Docker struct
 func New() (*Docker, error) {
-	cli, err := client.NewEnvClient()
+	ctx := context.Background()
+
+	cli, err := client.NewClientWithOpts(client.FromEnv)
 	if err != nil {
 		return nil, err
 	}
 
-	cc, err := cli.ContainerList(context.Background(), types.ContainerListOptions{})
+	cli.NegotiateAPIVersion(ctx)
+
+	cc, err := cli.ContainerList(ctx, container.ListOptions{})
 	if err != nil {
 		return nil, err
 	}
@@ -36,6 +42,11 @@ func newDocker(cc []types.Container) *Docker {
 			}
 
 			for _, name := range c.Names {
+				ip := net.ParseIP(port.IP)
+				if ip == nil || ip.To4() == nil {
+					continue
+				}
+
 				name = strings.TrimPrefix(name, "/")
 				ports[cntPort{name, port.PrivatePort}] = fmt.Sprintf("%s:%d", port.IP, port.PublicPort)
 			}
