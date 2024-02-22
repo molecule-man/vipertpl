@@ -13,25 +13,25 @@ import (
 	"github.com/spf13/viper"
 )
 
-// New creates new Parser
+// New creates new Parser.
 func New(funcs template.FuncMap) *Parser {
 	return &Parser{funcs}
 }
 
-// Parser is a struct holding `Parse` functionality
+// Parser is a struct holding `Parse` functionality.
 type Parser struct {
 	funcs template.FuncMap
 }
 
 // Parse goes though all the keys stored in viper config and parses them with
-// golang's internal templating engine
+// golang's internal templating engine.
 func Parse(v *viper.Viper) error {
 	p := Parser{}
 	return p.Parse(v)
 }
 
 // Parse goes though all the keys stored in viper config and parses them with
-// golang's internal templating engine
+// golang's internal templating engine.
 func (p *Parser) Parse(v *viper.Viper) error {
 	for _, key := range v.AllKeys() {
 		parser := parser{v: v, visitedKeys: map[string]struct{}{}}
@@ -96,7 +96,7 @@ func (p *parser) parseTpl(key string, rawVal interface{}) (interface{}, error) {
 }
 
 func tplFuncExec(cmd string, args ...string) (string, error) {
-	out, err := exec.Command(cmd, args...).CombinedOutput() //nolint:gosec
+	out, err := exec.Command(cmd, args...).CombinedOutput()
 	if err != nil {
 		return "", err
 	}
@@ -105,5 +105,5 @@ func tplFuncExec(cmd string, args ...string) (string, error) {
 }
 
 // ErrCircularDependency is returned when there is a circular dependency caused
-// by using tpl "ViperGet" function
+// by using tpl "ViperGet" function.
 var ErrCircularDependency = errors.New("circular dependency")

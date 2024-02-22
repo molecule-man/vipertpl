@@ -13,7 +13,7 @@ import (
 	"github.com/docker/docker/client"
 )
 
-// New initializes new Docker struct
+// New initializes new Docker struct.
 func New() (*Docker, error) {
 	ctx := context.Background()
 
@@ -56,13 +56,13 @@ func newDocker(cc []types.Container) *Docker {
 	return &Docker{ports}
 }
 
-// Docker struct holds docker-related template functions
+// Docker struct holds docker-related template functions.
 type Docker struct {
 	ports map[cntPort]string
 }
 
 // Port is a template function that mimics
-// `docker port <container name> <private port>` function
+// `docker port <container name> <private port>` function.
 func (d *Docker) Port(containerName string, port uint16) (string, error) {
 	url, ok := d.ports[cntPort{containerName, port}]
 	if !ok {

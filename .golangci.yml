@@ -6,8 +6,17 @@ run:
 linters:
   enable-all: true
   disable:
-    - maligned
+    - depguard
+    - exhaustivestruct
+    - exhaustruct
+    - goerr113
     - gomnd
+    - maligned
+    - nlreturn
+    - paralleltest
+    - testpackage
+    - varnamelen
+    - wrapcheck
 
 issues:
   # Ignore all default error exclusions
